@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  mysql-orders:
+    image: mysql:8.0
+    container_name: squad1-mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: orders_db
+      MYSQL_USER: orders_user
+      MYSQL_PASSWORD: orders_password
+    volumes:
+      # 1. Volume de Persistência (Dados do banco)
+      - mysql_orders_data:/var/lib/mysql
+      # 2. Volume de Inicialização (Scripts SQL)
+      - ./init:/docker-entrypoint-initdb.d
+    networks:
+      - ecommerce-network
+volumes:
+  mysql_orders_data: # O Docker gerencia este volume automaticamente
+networks:
+  ecommerce-network:
+    external: true
